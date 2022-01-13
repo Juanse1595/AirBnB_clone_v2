@@ -17,4 +17,3 @@ def do_pack():
     if archive_path.failed:
         return None
     return archive_path
-    
