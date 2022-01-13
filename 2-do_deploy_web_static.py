@@ -4,7 +4,7 @@ using the function do_deploy
 """
 from os.path import exists
 from fabric.api import *
-env.hosts = ['35.196.20.175', '52.23.183.91']
+env.hosts = ['34.138.152.200', '3.85.201.247']
 env.user = 'ubuntu'
 
 
