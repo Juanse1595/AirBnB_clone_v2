@@ -6,6 +6,8 @@ from os.path import exists
 from fabric.api import *
 env.hosts = ['35.196.20.175', '52.23.183.91']
 env.user = 'ubuntu'
+
+
 def do_deploy(archive_path):
     """Fabric script that distributes an archive to your web servers,
     using the function do_deploy
@@ -25,7 +27,7 @@ def do_deploy(archive_path):
             .format(filename_we, filename_woe))
         run("sudo rm -rf /tmp/{}".format(filename_we))
         run("sudo mv /data/web_static/releases/{}/web_static/* /data/\
-            web_static/releases/{}/".format(filename_woe, filename_woe))
+web_static/releases/{}/".format(filename_woe, filename_woe))
         run("sudo rm -rf /data/web_static/releases/{}/web_static"
             .format(filename_woe))
         run("sudo rm -rf /data/web_static/current")
