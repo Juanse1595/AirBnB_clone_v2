@@ -1,12 +1,11 @@
 #!/usr/bin/python3
-'''0-hello_route
-Starts a Flask web application'''
+"""0-hello_route
+Starts a Flask web application"""
 from flask import Flask
 
 
 app = Flask(__name__)
-app.url_map.strict_slashes = False
-@app.route("/")
+@app.route("/", strict_slashes = False)
 def hello_hbnb():
     """
     Return value for root directory
