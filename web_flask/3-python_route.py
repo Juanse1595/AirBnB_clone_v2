@@ -6,6 +6,8 @@ from flask import Flask
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+
+
 @app.route("/")
 def hello_hbnb():
     """
@@ -31,7 +33,7 @@ def c_text(text):
 
 
 @app.route("/python")
-@app.route("/python/<text>") # What's with those parentesis (<text>)?
+@app.route("/python/<text>")  # What's with those parentesis (<text>)?
 def py_text(text="is cool"):
     """
     Return value for /python/(<text>)
