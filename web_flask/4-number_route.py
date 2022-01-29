@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """3-python_route module
 Starts a Flask web application"""
-from flask import Flask, escape
+from flask import Flask
 
 
 app = Flask(__name__)
@@ -46,7 +46,7 @@ def n_int(n):
     """
     Returns 'n is a number' only if n is an integer
     """
-    return "{} is an integer".format(escape(n))
+    return "{} is a number".format(n)
 
 
 if __name__ == '__main__':
