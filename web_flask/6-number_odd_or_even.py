@@ -29,7 +29,7 @@ def c_text(text):
     """
     Return value for /c/<text>
     """
-    return f"C {text}".replace("_", " ")
+    return "C {}".format(text).replace("_", " ")
 
 
 @app.route("/python")
