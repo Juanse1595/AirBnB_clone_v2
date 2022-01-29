@@ -6,6 +6,8 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+
+
 @app.route("/")
 def hello_hbnb():
     """
@@ -31,7 +33,7 @@ def c_text(text):
 
 
 @app.route("/python")
-@app.route("/python/<text>") # What's with those parentesis (<text>)?
+@app.route("/python/<text>")
 def py_text(text="is cool"):
     """
     Return value for /python/(<text>)
@@ -44,7 +46,7 @@ def n_int(n):
     """
     Returns 'n is a number' only if n is an integer
     """
-    return "{} is an integer".format(n)
+    return "{} is a number".format(n)
 
 
 @app.route("/number_template/<int:n>")
@@ -53,7 +55,7 @@ def n_template(n):
     Returns a template if n is intege
     """
     return render_template('5-number.html', n=n)
-    
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")

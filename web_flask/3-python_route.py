@@ -33,7 +33,7 @@ def c_text(text):
 
 
 @app.route("/python")
-@app.route("/python/<text>")  # What's with those parentesis (<text>)?
+@app.route("/python/<text>")
 def py_text(text="is cool"):
     """
     Return value for /python/(<text>)
