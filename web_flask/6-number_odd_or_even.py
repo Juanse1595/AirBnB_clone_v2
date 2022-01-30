@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""3-python_route module
+"""6-number_odd_or_even module
 Starts a Flask web application"""
 from flask import Flask, render_template
 

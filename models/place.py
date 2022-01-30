@@ -9,7 +9,6 @@ from models.amenity import Amenity
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from models.review import Review
-from models.amenity import Amenity
 import os
 
 # Asociative Table
@@ -43,7 +42,7 @@ class Place(BaseModel, Base):
 
         amenities = relationship(
             'Amenity', secondary='place_amenity',
-            viewonly=False, overlaps='place_amenity')
+            viewonly=False, overlaps='place_amenities')
 
     else:
         @property
@@ -51,17 +50,17 @@ class Place(BaseModel, Base):
             """Getter of reviews"""
             reviews = models.storage.all(Review)
             return [value for value in reviews in
-                    reviews.values if self.id == value.place_id]
+                    reviews.values() if self.id == value.place_id]
 
         @property
         def amenities(self):
             """Getter for amenities"""
             lst_obj_amenities = models.storage.all(Amenity)
-            return [value for value in lst_obj_amenities.values
+            return [value for value in lst_obj_amenities.values()
                     if value.id in self.amenity_ids]
 
         @amenities.setter
         def amenities(self, arg):
             """Setter for amenities"""
             if isinstance(arg, Amenity):
-                amenity_ids.append(arg.id)
+                self.amenity_ids.append(arg.id)
