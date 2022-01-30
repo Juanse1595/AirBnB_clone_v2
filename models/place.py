@@ -17,7 +17,7 @@ place_amenity = Table('place_amenity', Base.metadata,
                       Column('place_id', String(60),
                              ForeignKey('places.id'),
                              primary_key=True, nullable=False),
-                      Column('amenity_id', String (60),
+                      Column('amenity_id', String(60),
                              ForeignKey('amenities.id'),
                              primary_key=True, nullable=False))
 
@@ -42,20 +42,23 @@ class Place(BaseModel, Base):
         reviews = relationship('Review', backref='place', cascade='delete')
 
         amenities = relationship(
-            'Amenity', secondary='place_amenity', viewonly=False, overlaps='place_amenity')
+            'Amenity', secondary='place_amenity',
+            viewonly=False, overlaps='place_amenity')
 
     else:
         @property
         def reviews(self):
             """Getter of reviews"""
             reviews = models.storage.all(Review)
-            return [value for value in reviews in reviews.values if self.id == value.place_id]
+            return [value for value in reviews in
+                    reviews.values if self.id == value.place_id]
 
         @property
         def amenities(self):
             """Getter for amenities"""
             lst_obj_amenities = models.storage.all(Amenity)
-            return [value for value in lst_obj_amenities.values if value.id in self.amenity_ids]
+            return [value for value in lst_obj_amenities.values
+                    if value.id in self.amenity_ids]
 
         @amenities.setter
         def amenities(self, arg):
