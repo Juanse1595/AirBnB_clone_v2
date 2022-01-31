@@ -40,7 +40,11 @@ class FileStorage:
                     break
 
     def reload(self):
-        """Loads storage dictionary from file"""
+        """deserializes the JSON file to __objects
+        - only if the JSON file (__file_path) exists
+        - otherwise, do nothing.
+        - If the file doesnt exist, no exception should be raised
+        """
         from models.base_model import BaseModel
         from models.user import User
         from models.place import Place
@@ -49,17 +53,15 @@ class FileStorage:
         from models.amenity import Amenity
         from models.review import Review
 
-        classes = {
-            'BaseModel': BaseModel, 'User': User, 'Place': Place,
-            'State': State, 'City': City, 'Amenity': Amenity,
-            'Review': Review
-        }
+        classes = {"BaseModel": BaseModel, "User": User, "State": State,
+                   "Amenity": Amenity, "Place": Place, "City": City,
+                   "Review": Review}
         try:
-            temp = {}
-            with open(FileStorage.__file_path, 'r') as f:
-                temp = json.load(f)
-                for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
+            with open(self.__file_path, 'r', encoding='UTF-8') as file:
+                js = json.load(file)
+            for key, value in js.items():
+                reloadobj = classes[js[key]["__class__"]](**js[key])
+                self.__objects[key] = reloadobj
         except FileNotFoundError:
             pass
 

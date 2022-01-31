@@ -35,24 +35,18 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """Query to DB to bring all objects (optional Class)"""
-        if cls is None:
-            classes = [Amenity, City, Place, Review, State, User]
-            dic = {}
-            for cls in classes:
-                lst_objs = self.__session.query(cls).all()
-
-                dic.update({obj.__class__.__name__ + '.' +
-                           obj.id: obj for obj in lst_objs})
-
-            return dic
+        """ Queries a database for objects """
+        if not cls:
+            res_list = self.__session.query(Amenity)
+            res_list.extend(self.__session.query(City))
+            res_list.extend(self.__session.query(Place))
+            res_list.extend(self.__session.query(Review))
+            res_list.extend(self.__session.query(State))
+            res_list.extend(self.__session.query(User))
         else:
-            if type(cls) is str:
-                cls = eval(cls)
-            lst_objs = self.__session.query(cls).all()
-
-            return {obj.__class__.__name__ + '.' +
-                    obj.id: obj for obj in lst_objs}
+            res_list = res_list = self.__session.query(cls)
+        return {'{}.{}'.format(type(obj).__name__, obj.id): obj
+                for obj in res_list}
 
     def new(self, obj):
         """Add obj to DB"""
