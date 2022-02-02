@@ -12,11 +12,13 @@ app.url_map.strict_slashes = False
 
 @app.route('/states_list')
 def states_list():
+    '''Sends objects to html template'''
     return render_template('7-states_list.html', objs=storage_objs)
 
 
 @app.teardown_appcontext
 def remove_session(self):
+    '''Removes session'''
     storage.close()
 
 
