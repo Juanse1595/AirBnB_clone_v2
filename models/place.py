@@ -1,27 +1,28 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-from sqlalchemy.orm import relationship
-import models
-from models.amenity import Amenity
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
-from models.review import Review
+from sqlalchemy.ext.declarative import declarative_base
+import models
+from sqlalchemy.orm import relationship, backref
+from sqlalchemy.sql.schema import Column, ForeignKey, Table
+from sqlalchemy.sql.sqltypes import String, Integer, Float
+
 from os import getenv
+from models.review import Review
+from models.amenity import Amenity
 
-# Asociative Table
+
+column_amenity = Column('amenity_id', String(60), ForeignKey('amenities.id'),
+                        nullable=False)
 place_amenity = Table('place_amenity', Base.metadata,
-                      Column('place_id', String(60),
-                             ForeignKey('places.id'),
+                      Column('place_id', String(60), ForeignKey('places.id'),
                              nullable=False),
-                      Column('amenity_id', String(60),
-                             ForeignKey('amenities.id'),
-                             nullable=False))
-
+                      column_amenity)
 
 if getenv('HBNB_TYPE_STORAGE') == 'db':
     class Place(BaseModel, Base):
         """ A place to stay """
-        __tablename__ = "places"
+        __tablename__ = 'places'
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         name = Column(String(128), nullable=False)
@@ -32,48 +33,47 @@ if getenv('HBNB_TYPE_STORAGE') == 'db':
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
-        amenity_ids = []
+        reviews = relationship("Review", backref="place",
+                               cascade="all, delete, delete-orphan")
+        amenities = relationship('Amenity', secondary='place_amenity',
+                                 back_populates='place_amenities',
+                                 viewonly=False)
 
 else:
     class Place(BaseModel):
-        """Place class fs mode"""
-        city_id = ""
-        user_id = ""
-        name = ""
-        description = ""
-        number_rooms = ""
-        number_bathrooms = ""
-        max_guest = ""
-        price_by_night = ""
-        latitude = ""
-        longitude = ""
+        city_id = ''
+        user_id = ''
+        name = ''
+        description = ''
+        number_rooms = ''
+        number_bathrooms = ''
+        max_guest = ''
+        price_by_night = ''
+        latitude = ''
+        longitude = ''
         amenity_ids = []
 
-HBNB_TYPE_STORAGE = getenv('HBNB_TYPE_STORAGE')
-if HBNB_TYPE_STORAGE == 'db':
-    reviews = relationship('Review', backref='place', cascade='delete')
+        @property
+        def reviews(self):
+            """
+            returns the list of Review instances with place_id equals
+            to the current Place.id => It will be the FileStorage
+            relationship between Place and Review
+            """
+            total_reviews = models.storage.all(Review)
+            result = []
+            for each in total_reviews.values():
+                result.append(each)
+            return result
 
-    amenities = relationship(
-        'Amenity', secondary='place_amenity',
-        viewonly=False, back_populates='place_amenities')
+        @property
+        def amenities(self):
+            """Getter to amenities"""
+            self.amenity_ids = models.storage.all(Amenity)
+            return self.amenity_ids
 
-else:
-    @property
-    def reviews(self):
-        """Getter of reviews"""
-        reviews = models.storage.all(Review)
-        return [value for value in reviews in
-                reviews.values() if self.id == value.place_id]
-
-    @property
-    def amenities(self):
-        """Getter for amenities"""
-        lst_obj_amenities = models.storage.all(Amenity)
-        return [value for value in lst_obj_amenities.values()
-                if value.id in self.amenity_ids]
-
-    @amenities.setter
-    def amenities(self, arg):
-        """Setter for amenities"""
-        if isinstance(arg, Amenity):
-            self.amenity_ids.append(arg.id)
+        @amenities.setter
+        def amenities(self, id):
+            """ Function setter to amenities """
+            if id.__class__.__name__ == 'Amenity':
+                self.amenity_ids.append(id)
