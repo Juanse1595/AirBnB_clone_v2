@@ -1,10 +1,7 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-from typing import overload
 from sqlalchemy.orm import relationship
 import models
-from models import review
-from models import amenity
 from models.amenity import Amenity
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
