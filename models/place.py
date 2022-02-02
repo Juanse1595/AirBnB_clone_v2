@@ -55,7 +55,7 @@ if HBNB_TYPE_STORAGE == 'db':
 
     amenities = relationship(
         'Amenity', secondary='place_amenity',
-        viewonly=False, overlaps='place_amenities')
+        viewonly=False, backref='place_amenities')
 
 else:
     @property
