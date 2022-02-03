@@ -6,8 +6,8 @@
     <BODY>
         <H1>States</H1>
         <UL>
-            {% for value in storage_objs.values() %}
-            <LI>{{ value['id'] }}: <B>{{ value['name'] }}</B></LI>
+            {% for state in states_objs %}
+            <LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
             {% endfor %}
         </UL>
     </BODY>

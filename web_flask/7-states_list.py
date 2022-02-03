@@ -3,9 +3,10 @@
 Starts a Flask web application"""
 from flask import Flask, render_template
 from models import storage
+from models.state import State
 
 
-storage_objs = storage.all()
+state_objs = storage.all(State).values()
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
@@ -13,7 +14,7 @@ app.url_map.strict_slashes = False
 @app.route('/states_list')
 def states_list():
     '''Sends objects to html template'''
-    return render_template('7-states_list.html', storage_objs=storage_objs)
+    return render_template('7-states_list.html', state_objs=state_objs)
 
 
 @app.teardown_appcontext
