@@ -16,11 +16,13 @@ def states_list():
     state_objs = storage.all(State).values()
     return render_template('7-states_list.html', state_objs=state_objs)
 
+
 @app.route('/cities_by_states')
 def cities_by_states_list():
     '''Sends objects to html template'''
     state_objs = storage.all(State).values()
     return render_template('8-cities_by_states.html', state_objs=state_objs)
+
 
 @app.teardown_appcontext
 def remove_session(self):
