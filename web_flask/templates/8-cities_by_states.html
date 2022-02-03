@@ -9,9 +9,9 @@
             {% for state in state_objs|sort(attribute='name') %}
             <LI>{{ state.id }}: <B>{{ state.name }}</B>
                 <UL>
-                    {% for city un state_objs.cities|sort(attribute='name') %}
-                    <LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
-                    {% endfor %}
+                        {% for city un state_objs.cities|sort(attribute='name') %}
+                        <LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
+                        {% endfor %}
                 </UL>
             </LI>
             {% endfor %}
